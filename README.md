@@ -14,7 +14,7 @@ stay in `docker` directory.
 Then run these commands in separate terminals.
 
 ```bash
-# start driver (you may set use_fake_hardware to true)
+# start driver (you may set use_fake_hardware to false)
 docker compose run --rm ur_ros2_base
 ```
 

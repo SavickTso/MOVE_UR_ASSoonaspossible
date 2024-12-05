@@ -10,7 +10,7 @@ services:
     stdin_open: true
     tty: true
     restart: no
-    command: ["/bin/bash", "-c", "export ROS_DOMAIN_ID=1 && export ROS_MASTER_URI=1 && ros2 launch ur_robot_driver ur_control.launch.py ur_type:=ur10e robot_ip:=192.168.1.102 use_fake_hardware:=false launch_rviz:=false "]
+    command: ["/bin/bash", "-c", "export ROS_DOMAIN_ID=1 && export ROS_MASTER_URI=1 && ros2 launch ur_robot_driver ur_control.launch.py ur_type:=ur10e robot_ip:=192.168.1.102 use_fake_hardware:=true launch_rviz:=false "]
 
   ur_ros2_moveit:
     image: savicktso/ur_ros2_2024:humble
