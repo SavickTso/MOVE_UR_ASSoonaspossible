@@ -1,25 +1,32 @@
-# simple_moveit2_universal_robot_movement
+Off-shelf solution to save my poor little brain severely damaged by UR ROS2 driver and its doc.
 
-This repository will simply move a ur3e to a target pose. 
-The hello_moveit_ur file is explained here: https://moveit.picknik.ai/humble/doc/tutorials/your_first_project/your_first_project.html
+Thanks to `hello_moveit_ur` package from [link](https://github.com/LucaBross/simple_moveit2_universal_robots_movement).
 
-The difference to the hello_moveit file is, that there is the ur_manipulator instead of the pandas_arm used.
+## Installation
+Build the docker image
+
+```bash
+cd ./docker && docker build -t savicktso/ur_ros2_2024:humble .
+```
+
+stay in `docker` directory.
+
+Then run these commands in separate terminals.
+
+```bash
+# start driver (you may set use_fake_hardware to true)
+docker compose run --rm ur_ros2_base
+```
+
+```bash
+# start moveit2
+docker compose run --rm ur_ros2_moveit
+```
+
+```bash
+# move the robot in Cartersian path. (move tcp 10cm upper in z axis)
+docker compose run --rm ur_ros2_cartesianmove
+```
 
 
-**Requirements** 
-
-I installed ROS2 Humble: https://docs.ros.org/en/humble/index.html
-
-I installed the ROS2 UR Driver: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver
-
-**How to**
-
-Start `ros2 launch ur_robot_driver ur_control.launch.py ur_type:=ur3e robot_ip:=192.168.1.102 launch_rviz:=false initial_joint_controller:=joint_trajectory_controller` to connect to the Universal Robot. 
-
-Start the `external control urcap` on the UR to allow external control. 
-
-Start the `ros2 launch ur_moveit_config ur_moveit.launch.py ur_type:=ur3e launch_rviz:=true` to cofigure moveit. 
-
-Start the hello_moveit_ur file with a launchfile `ros2 launch hello_moveit_ur hello_moveit_ur_launch.py`.
-
-The launchfile provides the required parameters.
+I wish my life can be this easy.
