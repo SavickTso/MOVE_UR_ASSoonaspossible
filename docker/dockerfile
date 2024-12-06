@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     git \
     ros-humble-moveit \
-    ros-humble-ur=2.2.16-5jammy.20241029.212959 \
+    ros-humble-ur \
     && apt-get upgrade -y
 
 RUN echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc
