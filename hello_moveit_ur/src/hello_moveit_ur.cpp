@@ -73,8 +73,23 @@ int main(int argc, char *argv[])
   waypoints.push_back(current_pose);
   // Move up in the Z direction
   geometry_msgs::msg::Pose target_pose = current_pose;
-  target_pose.position.z += 0.1; // Move 10 cm up
+
+  double cartesian_x, cartesian_y, cartesian_z;
+  node->get_parameter_or("coordinates.x", cartesian_x, 0.0);
+  node->get_parameter_or("coordinates.y", cartesian_y, 0.0);
+  node->get_parameter_or("coordinates.z", cartesian_z, 0.0);
+  target_pose.position.x += cartesian_x;
+  target_pose.position.y += cartesian_y;
+  target_pose.position.z += cartesian_z;
   waypoints.push_back(target_pose);
+  RCLCPP_INFO(logger, "Target Pose: position( x: %f, y: %f, z: %f ) orientation( x: %f, y: %f, z: %f, w: %f )",
+                  target_pose.position.x,
+                  target_pose.position.y,
+                  target_pose.position.z,
+                  target_pose.orientation.x,
+                  target_pose.orientation.y,
+                  target_pose.orientation.z,
+                  target_pose.orientation.w);
   // target_pose.position.y += 0.1; // Move 10 cm along Y-axis
   // waypoints.push_back(target_pose);
 
@@ -82,7 +97,6 @@ int main(int argc, char *argv[])
   const double jump_threshold = 0.0;
   const double eef_step = 0.01;
   double fraction = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
-  RCLCPP_INFO(logger, "Visualizing plan 4 (Cartesian path) (%.2f%% achieved)", fraction * 100.0);
   move_group_interface.execute(trajectory); // Execute the trajectory
 
   // Shutdown ROS

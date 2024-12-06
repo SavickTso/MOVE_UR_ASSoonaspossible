@@ -2,7 +2,14 @@ import os
 import sys
 
 import launch
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import (
+    Command,
+    FindExecutable,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+    TextSubstitution,
+)
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -110,8 +117,33 @@ def get_robot_description_semantic():
 
 def generate_launch_description():
     # generate_common_hybrid_launch_description() returns a list of nodes to launch
+    coordinates_x_arg = DeclareLaunchArgument(
+        "coordinates_x",
+        default_value="0.0",
+        description="X-coordinate value for the robot",
+    )
+    coordinates_y_arg = DeclareLaunchArgument(
+        "coordinates_y",
+        default_value="0.0",
+        description="Y-coordinate value for the robot",
+    )
+    coordinates_z_arg = DeclareLaunchArgument(
+        "coordinates_z",
+        default_value="0.0",
+        description="Z-coordinate value for the robot",
+    )
+    use_sim_time_arg = DeclareLaunchArgument(
+        "use_sim_time", default_value="True", description="Use simulation time"
+    )
+    coordinates_x = LaunchConfiguration("coordinates_x")
+    coordinates_y = LaunchConfiguration("coordinates_y")
+    coordinates_z = LaunchConfiguration("coordinates_z")
+    use_sim_time = LaunchConfiguration("use_sim_time")
+    coordinates = {"x": coordinates_x, "y": coordinates_y, "z": coordinates_z}
+
     robot_description = get_robot_description()
     robot_description_semantic = get_robot_description_semantic()
+
     demo_node = Node(
         package="hello_moveit_ur",
         executable="hello_moveit_ur",
@@ -120,8 +152,18 @@ def generate_launch_description():
         parameters=[
             robot_description,
             robot_description_semantic,
-            {"use_sim_time": True},
+            {"use_sim_time": use_sim_time},
+            {"coordinates": coordinates},
         ],
     )
 
-    return launch.LaunchDescription([demo_node])
+    # Return the launch description with declared arguments and the node
+    return launch.LaunchDescription(
+        [
+            coordinates_x_arg,
+            coordinates_y_arg,
+            coordinates_z_arg,
+            use_sim_time_arg,
+            demo_node,
+        ]
+    )
