@@ -4,6 +4,8 @@
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/msg/transform_stamped.hpp>
+#include <cmath>
+
 
 int main(int argc, char *argv[])
 {
@@ -97,6 +99,21 @@ int main(int argc, char *argv[])
   const double jump_threshold = 0.0;
   const double eef_step = 0.01;
   double fraction = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+  double velocity_scaling_factor = 1.0; // Scale to 20% of default speed
+  double total_time = 0.0;
+
+  // Adjust time_from_start for each waypoint in the trajectory
+  // for (size_t i = 0; i < trajectory.joint_trajectory.points.size(); ++i) {
+  //     if (i == 0) {
+  //         trajectory.joint_trajectory.points[i].time_from_start = rclcpp::Duration::from_seconds(0.0);
+  //     } else {
+  //         trajectory.joint_trajectory.points[i].time_from_start = rclcpp::Duration::from_seconds(rclcpp::Duration(trajectory.joint_trajectory.points[i-1].time_from_start).seconds() + (rclcpp::Duration(trajectory.joint_trajectory.points[i].time_from_start).seconds() - rclcpp::Duration(trajectory.joint_trajectory.points[i-1].time_from_start).seconds()) / velocity_scaling_factor);
+  //     }
+  // }
+  for (size_t i = 0; i < trajectory.joint_trajectory.points.size(); ++i) {
+      trajectory.joint_trajectory.points[i].time_from_start = rclcpp::Duration::from_seconds(rclcpp::Duration(trajectory.joint_trajectory.points[i].time_from_start).seconds() / velocity_scaling_factor);
+  }
+
   move_group_interface.execute(trajectory); // Execute the trajectory
 
   // Shutdown ROS
