@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y \
     ros-humble-ur \
     ros-humble-camera-calibration-parsers \
     ros-humble-visp \
+    ros-humble-moveit-visual-tools \
+    ros-humble-ros2-control \
+    ros-humble-ros2-controllers \
     && apt-get upgrade -y
 
 RUN echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc
