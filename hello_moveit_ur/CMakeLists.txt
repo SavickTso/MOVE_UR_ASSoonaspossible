@@ -9,8 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(rclcpp REQUIRED)
-
-
+find_package(moveit_visual_tools REQUIRED)
 
 add_executable(hello_moveit_ur src/hello_moveit_ur.cpp)
 target_include_directories(hello_moveit_ur PUBLIC
@@ -23,12 +22,30 @@ ament_target_dependencies(
   "rclcpp"
 )
 
-install(TARGETS hello_moveit_ur
-  DESTINATION lib/${PROJECT_NAME})
+add_executable(pilz_moveit_ur src/pilz_moveit_ur.cpp)
+target_include_directories(pilz_moveit_ur PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_compile_features(pilz_moveit_ur PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+ament_target_dependencies(
+  pilz_moveit_ur
+  "moveit_ros_planning_interface"
+  "rclcpp"
+)
+
+
+install(
+  TARGETS
+    hello_moveit_ur
+    pilz_moveit_ur
+  DESTINATION
+    lib/${PROJECT_NAME}
+)
 
 # Install launch files.
 install(DIRECTORY
   launch
+  config
   DESTINATION share/${PROJECT_NAME}/
 )
 
