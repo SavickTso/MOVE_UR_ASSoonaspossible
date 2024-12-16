@@ -29,6 +29,8 @@ docker compose run --rm ur_ros2_moveit
 docker compose run --rm ur_ros2_cartesianmove
 ```
 
+**Notice that I specify robot model as UR10e, make sure to search the codebase and replace them with yours.**
+
 ### Use pilz planner 
 
 Commands above are using default OMPL planner, to use the pilz planner's PTP planning, try:
@@ -45,8 +47,3 @@ docker compose run --rm ur_ros2_moveit_pilz
 # move the robot in Cartersian path. (move tcp 10cm upper in z axis)
 docker compose run --rm ur_ros2_cartesianmove_pilz
 ```
-
-### TODO
-
-1. replace joint_limits.yaml to avoid shoulder hitting ground.
-2. add velocity control/arg passing in pilz planner.

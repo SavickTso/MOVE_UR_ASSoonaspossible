@@ -69,7 +69,7 @@ def launch_setup(context, *args, **kwargs):
     launch_servo = LaunchConfiguration("launch_servo")
 
     joint_limit_params = PathJoinSubstitution(
-        [FindPackageShare(description_package), "config", ur_type, "joint_limits.yaml"]
+        [FindPackageShare("hello_moveit_ur"), "config", ur_type, "joint_limits.yaml"]
     )
     kinematics_params = PathJoinSubstitution(
         [FindPackageShare(description_package), "config", ur_type, "default_kinematics.yaml"]

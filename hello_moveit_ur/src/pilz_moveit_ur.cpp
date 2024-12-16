@@ -23,6 +23,11 @@ int main(int argc, char *argv[])
   // Create the MoveIt MoveGroup Interface
   using moveit::planning_interface::MoveGroupInterface;
   auto move_group_interface = MoveGroupInterface(node, "ur_manipulator");
+  double vel_scale, acc_scale;
+  node->get_parameter_or("vel_scale", vel_scale, 0.1);
+  node->get_parameter_or("acc_scale", acc_scale, 0.1);
+  move_group_interface.setMaxAccelerationScalingFactor(acc_scale);
+  move_group_interface.setMaxVelocityScalingFactor(vel_scale);
 
   // TF2 setup: create the Buffer and Listener
   auto tf_buffer = std::make_shared<tf2_ros::Buffer>(node->get_clock());

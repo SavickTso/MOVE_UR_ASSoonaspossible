@@ -16,7 +16,7 @@ from launch_ros.substitutions import FindPackageShare
 
 def get_robot_description():
     joint_limit_params = PathJoinSubstitution(
-        [FindPackageShare("ur_description"), "config", "ur10e", "joint_limits.yaml"]
+        [FindPackageShare("hello_moveit_ur"), "config", "ur10e", "joint_limits.yaml"]
     )
     kinematics_params = PathJoinSubstitution(
         [
@@ -132,12 +132,24 @@ def generate_launch_description():
         default_value="0.0",
         description="Z-coordinate value for the robot",
     )
+    vel_scale_arg = DeclareLaunchArgument(
+        "vel_scale",
+        default_value="0.1",
+        description="Velocity scale for the robot",
+    )
+    acc_scale_arg = DeclareLaunchArgument(
+        "acc_scale",
+        default_value="0.1",
+        description="Acceleration scale for the robot",
+    )
     use_sim_time_arg = DeclareLaunchArgument(
         "use_sim_time", default_value="True", description="Use simulation time"
     )
     coordinates_x = LaunchConfiguration("coordinates_x")
     coordinates_y = LaunchConfiguration("coordinates_y")
     coordinates_z = LaunchConfiguration("coordinates_z")
+    vel_scale = LaunchConfiguration("vel_scale")
+    acc_scale = LaunchConfiguration("acc_scale")
     use_sim_time = LaunchConfiguration("use_sim_time")
     coordinates = {"x": coordinates_x, "y": coordinates_y, "z": coordinates_z}
 
@@ -154,6 +166,8 @@ def generate_launch_description():
             robot_description_semantic,
             {"use_sim_time": use_sim_time},
             {"coordinates": coordinates},
+            {"vel_scale": vel_scale},
+            {"acc_scale": acc_scale},
         ],
     )
 
@@ -163,6 +177,8 @@ def generate_launch_description():
             coordinates_x_arg,
             coordinates_y_arg,
             coordinates_z_arg,
+            vel_scale_arg,
+            acc_scale_arg,
             use_sim_time_arg,
             demo_node,
         ]
