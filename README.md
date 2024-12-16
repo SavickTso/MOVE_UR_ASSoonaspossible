@@ -47,3 +47,13 @@ docker compose run --rm ur_ros2_moveit_pilz
 # move the robot in Cartersian path. (move tcp 10cm upper in z axis)
 docker compose run --rm ur_ros2_cartesianmove_pilz
 ```
+###
+Inside the bash container:
+```bash
+docker compose run --rm ur_ros2_bash
+```
+
+After the compilation, you can modify the scale factors and send cartesian space motion commands, for example:
+```bash
+ros2 launch hello_moveit_ur pilz_moveit_ur_launch.py coordinates_z:=-0.1 vel_scale:=0.5 acc_scale:=0.5
+```
